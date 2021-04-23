@@ -41,6 +41,7 @@ class LaunchDarklyFeatureProvider(application: Application) : FeatureProvider {
     }
 
     private companion object {
+        private val TAG = LaunchDarklyFeatureProvider::class.java.simpleName
         // TO USE: you need a real key to make this work.
         private const val TEST_MOBILE_KEY = "test"
         private const val PROD_MOBILE_KEY = "prod"
