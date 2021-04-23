@@ -1,9 +1,8 @@
 package com.betweentwobits.launchdarklydemo.featureflags
 
 import android.app.Application
+import android.util.Log
 import com.betweentwobits.launchdarklydemo.BuildConfig
-import com.betweentwobits.launchdarklydemo.featureflags.Feature.NewFeatureOne
-import com.betweentwobits.launchdarklydemo.featureflags.Feature.NewFeatureTwo
 import com.launchdarkly.android.LDClient
 import com.launchdarkly.android.LDConfig
 import com.launchdarkly.android.LDUser
@@ -26,19 +25,15 @@ class LaunchDarklyFeatureProvider(application: Application) : FeatureProvider {
     }
 
     override fun isFeatureEnabled(feature: Feature): Boolean {
+        if (!hasFeature(feature)) {
+            Log.d(TAG, "Feature \"${feature.title}\" is not setup in the Launch Darkly console, using default value.")
+        }
         return client.boolVariation(feature.key, feature.defaultValue)
     }
 
-    override fun hasFeature(feature: Feature): Boolean {
-        return when (feature) {
-            NewFeatureOne -> true
-            NewFeatureTwo -> true
-        }
-    }
+    override fun hasFeature(feature: Feature): Boolean = client.allFlags().containsKey(feature.key)
 
-    override fun tearDown() {
-        client.flush()
-    }
+    override fun tearDown() = client.flush()
 
     private companion object {
         private val TAG = LaunchDarklyFeatureProvider::class.java.simpleName
