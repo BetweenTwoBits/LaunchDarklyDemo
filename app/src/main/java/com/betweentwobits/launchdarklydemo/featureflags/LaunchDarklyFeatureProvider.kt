@@ -17,9 +17,7 @@ class LaunchDarklyFeatureProvider(application: Application) : FeatureProvider {
             .setMobileKey(apiKey)
             .build()
 
-        val user = LDUser.Builder("user_key")
-            .email("fake@example.com")
-            .build()
+        val user = LDUser.Builder("").build()
 
         client = LDClient.init(application, ldConfig, user, 5)
     }
